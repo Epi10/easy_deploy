@@ -29,3 +29,5 @@ rm -rf ${SRCPATH}
 git clone "${GITSCHEMA}://${git_user}:${git_password}@${GITREPO}" ${SRCPATH}
 
 (cd ${SRCPATH} && sh install.sh)
+
+rm -rf ${SRCPATH}/.git*
