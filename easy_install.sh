@@ -5,29 +5,43 @@ if [ -z "${REPO}" ]; then
     exit 0
 fi
 
-GITSCHEMA=${GITSCHEMA-https}
+
 GITREPO="github.com/Epi10/${REPO}"
 SRCPATH="/usr/local/src/${REPO}"
 
-if [ -z "${GITUSER}" ]; then
-    echo -n "ingrese su usuario github: "
-    read git_user
-else
-    git_user=${GITUSER}
-fi
+if [ -z  "${GITKEY}" ]; then
 
-if [ -z "${GITPASSWORD}" ]; then
-    echo -n "ingrese su password github: "
-    read -s git_password
-    echo
+    GITSCHEMA=${GITSCHEMA:-https}
+
+    if [ -z "${GITUSER}" ]; then
+        echo -n "ingrese su usuario github: "
+        read git_user
+    else
+        git_user=${GITUSER}
+    fi
+
+    if [ -z "${GITPASSWORD}" ]; then
+        echo -n "ingrese su password github: "
+        read -s git_password
+        echo
+    else
+        git_password=${GITPASSWORD}
+    fi
+    GITURL="${GITSCHEMA}://${git_user}:${git_password}@${GITREPO}"
 else
-    git_password=${GITPASSWORD}
+    yum install -y openssh-clients
+    mkdir -p /root/.ssh/
+    ssh-keyscan github.com 2> /dev/null > /root/.ssh/known_hosts
+    cp *rsa /root/.ssh/
+    chmod -R 600 /root/.ssh
+    GITURL="ssh://git@${GITREPO}"
 fi
 
 rm -rf ${SRCPATH}
 
-git clone "${GITSCHEMA}://${git_user}:${git_password}@${GITREPO}" ${SRCPATH}
+git clone "${GITURL}" ${SRCPATH}
 
 (cd ${SRCPATH} && sh install.sh)
 
 rm -rf ${SRCPATH}/.git*
+rm -rf /root/.ssh
