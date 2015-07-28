@@ -43,5 +43,9 @@ git clone "${GITURL}" ${SRCPATH}
 
 (cd ${SRCPATH} && sh install.sh)
 
-rm -rf ${SRCPATH}/.git*
-rm -rf /root/.ssh
+if [ -z "${KEEPGIT}" ]; then
+
+    rm -rf ${SRCPATH}/.git*
+    rm -rf /root/.ssh
+
+fi
