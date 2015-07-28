@@ -1,18 +1,19 @@
-#NTLWS dockerfile
+#Base Dockerfile
 
 FROM centos:7
 
 MAINTAINER epi10.cl
 
-#IF you use the base imag, you should especify the GITUSER and the GITPASSWORD
-# if you are using a already created image
-ENV GITUSER= GITPASSWORD= REPO=
+#Choose your repo
+ENV REPO 
+#ENV REPO ntl_ws
+
+#by default choose GITKEY = true, uncomment this and then specify git username and password
+ENV GITKEY true
+#ENV GITUSER git
+#ENV GITPASSWORD password
 
 ADD https://raw.githubusercontent.com/Epi10/easy_deploy/master/easy_install.sh /usr/local/src/easy_install.sh
-#    ADD GIT KEY instead of password
-# COPY git_key.key /root/.ssh/id_rsa
 
-RUN yum install -y git
-RUN GITUSER= GITPASSWORD= REPO=sh /usr/local/src/easy_install.sh
-
-COMMAND ["/bin/bash"]
+# if you add a GITKEY instead of password uncomment this line
+ADD id_rsa /root/
