@@ -32,7 +32,7 @@ else
     yum install -y openssh-clients
     mkdir -p /root/.ssh/
     ssh-keyscan github.com 2> /dev/null > /root/.ssh/known_hosts
-    cp id_rsa /root/.ssh/
+    cp /root/id_rsa /root/.ssh/
     chmod -R 600 /root/.ssh
     GITURL="ssh://git@${GITREPO}"
 fi
